@@ -1,0 +1,171 @@
+# فراخانی کردن کتاب خانه ها گرافیکی
+import tkinter as tk
+from tkinter import messagebox
+from tkinter import filedialog
+# فراخانی کردن ماژول دیتا بیس
+import mysql.connector
+
+# اتصال به دیتابیس
+mydb = mysql.connector.connect(
+    host="localhost",
+    user="root",
+    password="12345678",
+    database="tel_book"
+)
+mycursor = mydb.cursor()
+
+# طراحی پنجره اصلی
+win = tk.Tk()
+win.title("تلفن‌نامه")
+win.minsize(280, 400)
+win.geometry('280x400')
+win.configure(bg="#333333")
+win.resizable(0, 0)
+
+label_title = tk.Label(
+    text="مشخصات فردی",
+    foreground="#fff",
+    background="black",
+    font=('bold', 25),
+    width=15
+)
+
+frm = tk.Frame(relief=tk.GROOVE, borderwidth=5)
+first_name = tk.Label(
+    text="نام:",
+    foreground="black",
+    background="#fff",
+    font=('bold', 10),
+    width=10,
+    master=frm
+)
+first_name_ent = tk.Entry(master=frm, font=25)
+
+frm2 = tk.Frame(relief=tk.GROOVE, borderwidth=5)
+last_name = tk.Label(
+    text="نام خانوادگی:",
+    foreground="black",
+    background="#fff",
+    font=('bold', 10),
+    width=10,
+    master=frm2
+)
+last_name_ent = tk.Entry(master=frm2, font=25)
+
+frm3 = tk.Frame(relief=tk.GROOVE, borderwidth=5)
+number = tk.Label(
+    text="شماره تلفن:",
+    foreground="black",
+    background="#fff",
+    font=('bold', 10),
+    width=10,
+    master=frm3
+)
+
+number_ent = tk.Entry(master=frm3, font=25)
+
+frm4 = tk.Frame(relief=tk.GROOVE, borderwidth=5)
+email = tk.Label(
+    text="ایمیل:",
+    foreground="black",
+    background="#fff",
+    font=('bold', 10),
+    width=10,
+    master=frm4
+)
+
+email_ent = tk.Entry(master=frm4, font=25)
+
+frm5 = tk.Frame(relief=tk.GROOVE, borderwidth=5)
+image = tk.Label(
+    text="تصویر:",
+    foreground="black",
+    background="#fff",
+    font=('bold', 10),
+    width=10,
+    master=frm5
+)
+
+image_ent = tk.Entry(master=frm5, font=25)
+# تعریف کلاس های عملگر
+
+
+class operation:
+    def insert():
+        first_name_val = first_name_ent.get()
+        last_name_val = last_name_ent.get()
+        number_val = number_ent.get()
+        email_val = email_ent.get()
+        image_val = win.filename = filedialog.askopenfilename(
+            initialdir="/", title="Select file", filetypes=((("png", "*.*"), ("jpg", "*.*"), ("jepg", "*.*"))))
+
+        if first_name_val.isdigit() and last_name_val.isdigit():
+            messagebox.showerror(
+                title="خطا", message="در فیلد های نام و نام خانوادگی نباید عدد وارد شود ")
+            first_name_ent.delete(0, tk.END)
+            last_name_ent.delete(0, tk.END)
+        if len(email_val) >= 11:
+            if email_val in "." and email_val in "@" or email_val in "@":
+                messagebox.showerror(
+                    title="خطا", message="ایمیل وارد شده صحیص نمیباشد \n ایمیل واردشده باشد شامل . و @ باشد ")
+                # email_ent.delete(0, tk.END)
+        else:
+            messagebox.showerror(
+                title="خطا", message="ایمیل وارد شده صحیح نمیباشد ")
+            email_ent.delete(0, tk.END)
+        if not (first_name_val and last_name_val and number_val and email_val):
+            messagebox.showerror(
+                title="خطا", message="هیچ کدام از فیلدها نباید خالی باشد")
+        elif not number_val.isdigit():
+            messagebox.showerror(
+                title="خطا", message="شماره تلفن باید عددی باشد")
+            number_ent.delete(0, tk.END)
+        else:
+
+            mycursor.execute("""
+                    INSERT INTO insert_v (first_name, last_name, number_tel, email, image)
+                    VALUES ( %s, %s, %s,%s,%s);
+                """, (first_name_val, last_name_val, number_val, email_val, image_val))
+            mydb.commit()
+            messagebox.showinfo(
+                title="موفقیت", message="عملیات با موفقیت انجام شد")
+
+            first_name_ent.delete(0, tk.END)
+            last_name_ent.delete(0, tk.END)
+            number_ent.delete(0, tk.END)
+            email_ent.delete(0, tk.END)
+            image_ent.delete(0, tk.END)
+
+
+btn = tk.Button(
+    text="شروع و انتخواب عکس",
+    fg="#fafaf9",
+    bg="#3730a3",
+    width=15,
+    height=1,
+    command=operation.insert
+)
+
+# فراخانی ایتم های داخل پنجره
+label_title.pack(fill=tk.X, side="top", pady=10)
+first_name.pack(side="left")
+first_name_ent.pack(side="right")
+frm.pack()
+
+last_name.pack(side="left")
+last_name_ent.pack(side="right")
+frm2.pack()
+
+number.pack(side="left")
+number_ent.pack(side="right")
+frm3.pack()
+
+email.pack(side="left")
+email_ent.pack(side="right")
+frm4.pack()
+
+
+btn.pack()
+
+# برای باز نگه داشتن پنجره
+win.mainloop()
