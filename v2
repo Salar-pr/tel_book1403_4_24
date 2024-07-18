@@ -1,0 +1,432 @@
+# فراخانی کردن کتاب خانه ها گرافیکی
+import tkinter as tk
+from tkinter import messagebox
+from tkinter import filedialog
+from tkinter import ttk
+# فراخانی کردن ماژول دیتا بیس
+import mysql.connector
+
+# اتصال به دیتابیس
+mydb = mysql.connector.connect(
+    host="localhost",
+    user="root",
+    password="12345678",
+    database="tel_book"
+)
+mycursor = mydb.cursor()
+
+# طراحی پنجره اصلی
+win = tk.Tk()
+win.title("تلفن‌نامه")
+# win.minsize(280, 300)
+win.geometry('1000x540')
+win.configure(bg="#333333")
+# win.resizable(0, 0)
+
+frm_all = tk.Frame(relief=tk.GROOVE, borderwidth=5)
+
+frm_insert = tk.Frame(relief=tk.GROOVE, borderwidth=5,
+                      master=frm_all, height=1)
+
+label_title = tk.Label(
+    text="مشخصات فردی",
+    foreground="#fff",
+    background="black",
+    font=('bold', 25),
+    width=15,
+    master=frm_insert
+)
+
+frm = tk.Frame(relief=tk.GROOVE, borderwidth=5, master=frm_insert)
+first_name = tk.Label(
+    text="نام:",
+    foreground="black",
+    background="#fff",
+    font=('bold', 10),
+    width=10,
+    master=frm
+)
+first_name_ent = tk.Entry(master=frm, font=25)
+
+frm2 = tk.Frame(relief=tk.GROOVE, borderwidth=5, master=frm_insert)
+last_name = tk.Label(
+    text="نام خانوادگی:",
+    foreground="black",
+    background="#fff",
+    font=('bold', 10),
+    width=10,
+    master=frm2
+)
+last_name_ent = tk.Entry(master=frm2, font=25)
+
+frm3 = tk.Frame(relief=tk.GROOVE, borderwidth=5, master=frm_insert)
+number = tk.Label(
+    text="شماره تلفن:",
+    foreground="black",
+    background="#fff",
+    font=('bold', 10),
+    width=10,
+    master=frm3
+)
+
+number_ent = tk.Entry(master=frm3, font=25)
+
+frm4 = tk.Frame(relief=tk.GROOVE, borderwidth=5, master=frm_insert)
+email = tk.Label(
+    text="ایمیل:",
+    foreground="black",
+    background="#fff",
+    font=('bold', 10),
+    width=10,
+    master=frm4
+)
+
+email_ent = tk.Entry(master=frm4, font=25)
+
+
+label_comp = tk.Label(
+    text="مشخصات سازمانی",
+    foreground="#fff",
+    background="black",
+    font=('bold', 25),
+    width=15,
+    master=frm_insert
+)
+
+frm_comp = tk.Frame(relief=tk.GROOVE, borderwidth=5, master=frm_all)
+label_comp = tk.Label(
+    text="مشخصات سازمانی",
+    foreground="#fff",
+    background="black",
+    font=('bold', 25),
+    width=15,
+    master=frm_comp
+)
+
+frm_name_comp = tk.Frame(relief=tk.GROOVE, borderwidth=5, master=frm_comp)
+comp_name_ent = tk.Entry(master=frm_name_comp, font=25)
+comp_name = tk.Label(
+    text="نام سازمان",
+    foreground="black",
+    background="#fff",
+    font=('bold', 10),
+    width=10,
+    master=frm_name_comp
+)
+
+frm_tel_comp = tk.Frame(relief=tk.GROOVE, borderwidth=5, master=frm_comp)
+comp_tel_ent = tk.Entry(master=frm_tel_comp, font=25)
+comp_tel = tk.Label(
+    text="شماره سازمان",
+    foreground="black",
+    background="#fff",
+    font=('bold', 10),
+    width=10,
+    master=frm_tel_comp
+)
+frm_address_comp = tk.Frame(relief=tk.GROOVE, borderwidth=5, master=frm_comp)
+address_ent = tk.Entry(master=frm_address_comp, font=25)
+comp_address = tk.Label(
+    text="محل سازمان",
+    foreground="black",
+    background="#fff",
+    font=('bold', 10),
+    width=10,
+    master=frm_address_comp
+)
+
+frm_email_comp = tk.Frame(relief=tk.GROOVE, borderwidth=5, master=frm_comp)
+comp_email_ent = tk.Entry(master=frm_email_comp, font=25)
+comp_email = tk.Label(
+    text="ایمیل سازمان",
+    foreground="black",
+    background="#fff",
+    font=('bold', 10),
+    width=10,
+    master=frm_email_comp
+)
+
+frm_site_comp = tk.Frame(relief=tk.GROOVE, borderwidth=5, master=frm_comp)
+site_ent = tk.Entry(master=frm_site_comp, font=25)
+comp_site = tk.Label(
+    text="سایت سازمان",
+    foreground="black",
+    background="#fff",
+    font=('bold', 10),
+    width=10,
+    master=frm_site_comp
+)
+
+frm_local_tel_comp = tk.Frame(relief=tk.GROOVE, borderwidth=5, master=frm_comp)
+local_tel_ent = tk.Entry(master=frm_local_tel_comp, font=25)
+comp_local_tel = tk.Label(
+    text="شماره داخلی ",
+    foreground="black",
+    background="#fff",
+    font=('bold', 10),
+    width=10,
+    master=frm_local_tel_comp
+)
+
+frm_CEO_comp = tk.Frame(relief=tk.GROOVE, borderwidth=5, master=frm_comp)
+CEO_ent = tk.Entry(master=frm_CEO_comp, font=25)
+comp_CEO = tk.Label(
+    text="مدیر شرکت",
+    foreground="black",
+    background="#fff",
+    font=('bold', 10),
+    width=10,
+    master=frm_CEO_comp
+)
+
+frm_postal_code_comp = tk.Frame(
+    relief=tk.GROOVE, borderwidth=5, master=frm_comp)
+postal_code_ent = tk.Entry(master=frm_postal_code_comp, font=25)
+comp_postal_code = tk.Label(
+    text="کد پستی",
+    foreground="black",
+    background="#fff",
+    font=('bold', 10),
+    width=10,
+    master=frm_postal_code_comp
+)
+
+frm_search = tk.Frame(relief=tk.GROOVE, borderwidth=5, width=50)
+label_search = tk.Label(
+    text="جستجو",
+    foreground="#fff",
+    background="black",
+    font=('bold', 25),
+    width=15,
+)
+search_ent = tk.Entry(master=frm_search, font=25, width=31)
+
+
+# تعریف کلاس های عملگر
+
+
+class operation:
+    def insert():
+        first_name_val = first_name_ent.get()
+        last_name_val = last_name_ent.get()
+        number_val = number_ent.get()
+        email_val = email_ent.get()
+        comp_name_val = comp_name_ent.get()
+        comp_tel_val = comp_tel_ent.get()
+        comp_address_val = address_ent.get()
+        comp_email_val = comp_email_ent.get()
+        comp_site_val = site_ent.get()
+        comp_local_tel_val = local_tel_ent.get()
+        CEO_val = CEO_ent.get()
+        comp_postal_code_val = postal_code_ent.get()
+
+        if first_name_val.isdigit() and last_name_val.isdigit() and comp_name_val.isdigit() and CEO_val.isdigit():
+            messagebox.showerror(
+                title="خطا", message="در فیلد های نام و نام خانوادگی نباید عدد وارد شود ")
+            first_name_ent.delete(0, tk.END)
+            last_name_ent.delete(0, tk.END)
+            comp_name_ent.delete(0, tk.END)
+            CEO_ent.delete(0, tk.END)
+        if not comp_address_val in ',':
+            messagebox.showerror(
+                title='خطا', message="ادرس را باید از استان/شهر/محله/خیابان/کوچه/پلاک/ ذکر شود \nو با علامت (,)ان ها از هم جدا شوند"
+            )
+
+        if not comp_site_val in '.ir' or comp_site_val in '.com' or comp_site_val in '.org':
+            messagebox.showerror(
+                title='خطا', message="پسوند  سایت معتبر نیست"
+            )
+        if len(email_val) >= 11 and len(comp_email_val) >= 11:
+            if email_val in "." and email_val in "@" or comp_email_val in "@" and comp_email_val in "." and comp_email_val in "@" or comp_email_val in "@":
+                messagebox.showerror(
+                    title="خطا", message="ایمیل وارد شده صحیص نمیباشد \n ایمیل واردشده باشد شامل . و @ باشد ")
+                email_ent.delete(0, tk.END)
+        else:
+            messagebox.showerror(
+                title="خطا", message="ایمیل وارد شده صحیح نمیباشد ")
+            email_ent.delete(0, tk.END)
+        if not (first_name_val and last_name_val and number_val and email_val
+                and comp_name_val and comp_tel_val and comp_email_val and comp_address_val
+                and comp_site_val and comp_local_tel_val
+                and CEO_val and comp_postal_code_val):
+            messagebox.showerror(
+                title="خطا", message="هیچ کدام از فیلدها نباید خالی باشد")
+        elif not number_val.isdigit() and comp_local_tel_val.isdigit() and comp_local_tel_val.isdigit() and comp_postal_code_val.isdigit():
+            messagebox.showerror(
+                title="خطا", message="فیلد های عددی باید داده عددی داشته باشند")
+            number_ent.delete(0, tk.END)
+        else:
+            image_val = win.filename = filedialog.askopenfilename(
+                initialdir="/", title="Select file", filetypes=((("png", "*.*"), ("jpg", "*.*"), ("jepg", "*.*"))))
+
+            mycursor.execute("""
+                    INSERT INTO insert_v (first_name, last_name, number_tel, email, image)
+                    VALUES ( %s, %s, %s,%s,%s);
+                """, (first_name_val, last_name_val, number_val, email_val, image_val))
+            mycursor.execute("""
+                    INSERT INTO company (name_company, number_tel_company, address, email_company, site_company, local_tel_company, CEO_company, postal_code)
+                    VALUES ( %s, %s, %s,%s,%s,%s,%s,%s);
+                """, (comp_name_val, comp_tel_val, comp_email_val, comp_address_val, comp_site_val, comp_local_tel_val, CEO_val, comp_postal_code_val))
+            mydb.commit()
+            mydb.close()
+            messagebox.showinfo(
+                title="موفقیت", message="عملیات با موفقیت انجام شد")
+
+            first_name_ent.delete(0, tk.END)
+            last_name_ent.delete(0, tk.END)
+            number_ent.delete(0, tk.END)
+            email_ent.delete(0, tk.END)
+            comp_name_ent.delete(0, tk.END)
+            comp_tel_ent.delete(0, tk.END)
+            comp_email_ent.delete(0, tk.END)
+            address_ent.delete(0, tk.END)
+            site_ent.delete(0, tk.END)
+            local_tel_ent.delete(0, tk.END)
+            CEO_ent.delete(0, tk.END)
+            postal_code_ent.delete(0, tk.END)
+
+# نمایش فیلد ها و اطلاعات موجود در دیتابیس
+    def show_data():
+        frm_color = tk.Frame(relief=tk.GROOVE, borderwidth=5, bg="#fff")
+
+        frm_color.pack(fill=tk.BOTH, expand=True)
+
+        tree = ttk.Treeview(win, columns=(
+            "column1", "column2", "column3", "column4", "column5", "column6"), show='headings')
+        tree.heading("column1", text="کد کلیدی")
+        tree.heading("column2", text="نام")
+        tree.heading("column3", text="نام خانوادگی")
+        tree.heading("column4", text="شماره")
+        tree.heading("column5", text="ایمیل")
+        tree.heading("column6", text="عکس")
+        mycursor.execute("SELECT * FROM insert_v ")
+        rows = mycursor.fetchall()
+        for row in rows:
+            tree.insert("", "end", values=row)
+
+        v_scrollbar = ttk.Scrollbar(
+            win, orient=tk.VERTICAL, command=tree.yview)
+        tree.config(yscroll=v_scrollbar.set)
+        v_scrollbar.pack(side=tk.RIGHT, fill=tk.Y)
+        tree.pack(side=tk.BOTTOM, expand=True)
+
+        h_scrollbar = ttk.Scrollbar(
+            win, orient=tk.HORIZONTAL, command=tree.xview)
+        tree.config(xscroll=h_scrollbar.set)
+        h_scrollbar.pack(side=tk.BOTTOM, fill=tk.X)
+        tree.pack(side=tk.BOTTOM, expand=True)
+        mydb.commit()
+
+        tree = ttk.Treeview(win, columns=("column1", "column2", "column3", "column4",
+                            "column5", "column6", "column7", "column8", "column9"), show='headings')
+        tree.heading("column1", text="کد کلیدی سازمان")
+        tree.heading("column2", text="نام سازمان")
+        tree.heading("column3", text="تلفن سازمان")
+        tree.heading("column4", text="ادرس محل سازمان")
+        tree.heading("column5", text="ایمیل سازمان")
+        tree.heading("column6", text="سایت سازمان")
+        tree.heading("column7", text="شماره داخلی سازمانی")
+        tree.heading("column8", text="نام مدیر عامل سازمان")
+        tree.heading("column9", text="کد پستی")
+        mycursor.execute("SELECT * FROM company ")
+        rows = mycursor.fetchall()
+        for row in rows:
+            tree.insert("", "end", values=row)
+
+        v_scrollbar = ttk.Scrollbar(
+            win, orient=tk.VERTICAL, command=tree.yview)
+        tree.config(yscroll=v_scrollbar.set)
+        v_scrollbar.pack(side=tk.RIGHT, fill=tk.Y)
+        tree.pack(side=tk.BOTTOM, expand=True)
+
+        h_scrollbar = ttk.Scrollbar(
+            win, orient=tk.HORIZONTAL, command=tree.xview)
+        tree.config(xscroll=h_scrollbar.set)
+        h_scrollbar.pack(side=tk.BOTTOM, fill=tk.X)
+        tree.pack(side=tk.BOTTOM, expand=True)
+        mydb.commit()
+
+
+btn_insert = tk.Button(
+    text="شروع و انتخواب عکس",
+    fg="#fafaf9",
+    bg="#3730a3",
+    width=15,
+    height=1,
+    command=operation.insert
+)
+
+btn_show_data = tk.Button(
+    text="نمایش اطلاعات",
+    fg="#fafaf9",
+    bg="#3730a3",
+    width=30,
+    height=1,
+    command=operation.show_data
+)
+
+
+# فراخانی ایتم های داخل پنجره
+frm_all.place(x=0, y=0)
+
+frm_insert.pack(side="left")
+label_title.pack(side="top")
+first_name.pack(side="left")
+first_name_ent.pack(side="right")
+frm.pack()
+
+last_name.pack(side="left")
+last_name_ent.pack(side="right")
+frm2.pack()
+
+number.pack(side="left")
+number_ent.pack(side="right")
+frm3.pack()
+
+email.pack(side="left")
+email_ent.pack(side="right")
+frm4.pack()
+
+
+label_comp.pack()
+frm_comp.pack(side="right")
+
+comp_name.pack(side="left")
+comp_name_ent.pack(side="right")
+frm_name_comp.pack()
+
+comp_tel.pack(side="left")
+comp_tel_ent.pack(side="right")
+frm_tel_comp.pack()
+
+comp_address.pack(side="left")
+address_ent.pack(side="right")
+frm_address_comp.pack()
+
+comp_email.pack(side="left")
+comp_email_ent.pack(side="right")
+frm_email_comp.pack()
+
+comp_site.pack(side="left")
+site_ent.pack(side="right")
+frm_site_comp.pack()
+
+comp_local_tel.pack(side="left")
+local_tel_ent.pack(side="right")
+frm_local_tel_comp.pack()
+
+comp_CEO.pack(side="left")
+CEO_ent.pack(side="right")
+frm_CEO_comp.pack()
+
+comp_postal_code.pack(side="left")
+postal_code_ent.pack(side="right")
+frm_postal_code_comp.pack()
+
+btn_insert.place(x=100, y=250)
+
+btn_show_data.place(x=300, y=400)
+
+
+# برای باز نگه داشتن پنجره
+win.mainloop()
